@@ -21,7 +21,8 @@ const bookSchema = new Schema<Ibook>({
     isbn: {
         type: String,
         trim: true,
-        required: true
+        required: true,
+        unique: [true, 'isbn must have to be unique'],
     },
     description: {
         type: String,
@@ -36,6 +37,9 @@ const bookSchema = new Schema<Ibook>({
         required: true,
         default: true
     },
+}, {
+    timestamps: true,
+    versionKey: false
 })
 
 const Book = model('Book', bookSchema)
