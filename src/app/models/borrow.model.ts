@@ -1,5 +1,5 @@
-import mongoose, { model, Schema } from "mongoose"
-import { Iborrow } from "../interfaces/borrow.interface"
+import { model, Schema } from 'mongoose';
+import { Iborrow } from '../interfaces/borrow.interface';
 
 const borrowSchema = new Schema<Iborrow>({
     book: {
@@ -17,13 +17,13 @@ const borrowSchema = new Schema<Iborrow>({
 }, {
     timestamps: true,
     versionKey: false
-})
+});
 
 borrowSchema.pre('save', function(){
-    console.log('Middle ware worked before saving the borrow')
-})
+    console.log('Middle ware worked before saving the borrow');
+});
 borrowSchema.post('save', function(doc){
-    console.log('Middle ware worked after saving the borrow and doc is: ', doc )
-})
-const Borrow = model('borrow', borrowSchema)
-export default Borrow
+    console.log('Middle ware worked after saving the borrow and doc is: ', doc );
+});
+const Borrow = model('borrow', borrowSchema);
+export default Borrow;

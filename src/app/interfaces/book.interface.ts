@@ -1,4 +1,4 @@
-import { Date } from "mongoose";
+import { Date } from 'mongoose';
 
 export interface Ibook {
     title: string,

@@ -1,7 +1,7 @@
-import { Model, model, Schema } from 'mongoose';
-import { bookMethods, Ibook } from '../interfaces/book.interface';
-
-const bookSchema = new Schema<Ibook, Model<Ibook>, bookMethods>({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("mongoose");
+const bookSchema = new mongoose_1.Schema({
     title: {
         type: String,
         trim: true,
@@ -16,7 +16,7 @@ const bookSchema = new Schema<Ibook, Model<Ibook>, bookMethods>({
     genre: {
         type: String,
         required: true,
-        enum: ['FICTION' , 'NON_FICTION' , 'SCIENCE' , 'HISTORY' , 'BIOGRAPHY' , 'FANTASY'],
+        enum: ['FICTION', 'NON_FICTION', 'SCIENCE', 'HISTORY', 'BIOGRAPHY', 'FANTASY'],
     },
     isbn: {
         type: String,
@@ -41,17 +41,16 @@ const bookSchema = new Schema<Ibook, Model<Ibook>, bookMethods>({
     timestamps: true,
     versionKey: false
 });
-
-bookSchema.method('updateAvailable', function(){
-    if(this.copies === 0){
+bookSchema.method('updateAvailable', function () {
+    if (this.copies === 0) {
         this.available = false;
     }
 });
-bookSchema.pre('save', function(){
+bookSchema.pre('save', function () {
     console.log('Middle ware worked before saving the book');
 });
-bookSchema.post('save', function(doc){
-    console.log('Middle ware worked after saving the book and doc is: ', doc );
+bookSchema.post('save', function (doc) {
+    console.log('Middle ware worked after saving the book and doc is: ', doc);
 });
-const Book = model('Book', bookSchema);
-export default Book;
+const Book = (0, mongoose_1.model)('Book', bookSchema);
+exports.default = Book;
