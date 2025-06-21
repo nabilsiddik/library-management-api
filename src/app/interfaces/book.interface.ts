@@ -1,4 +1,6 @@
-interface Ibook {
+import { Date } from "mongoose";
+
+export interface Ibook {
     title: string,
     author: string,
     genre: 'FICTION' | 'NON_FICTION' | 'SCIENCE' | 'HISTORY' | 'BIOGRAPHY' | 'FANTASY',
@@ -10,4 +12,6 @@ interface Ibook {
     updatedAt?: Date;
 }
 
-export default Ibook
+export interface bookMethods{
+    updateAvailable(): void
+}

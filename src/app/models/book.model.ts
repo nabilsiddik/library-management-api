@@ -1,7 +1,7 @@
-import { model, Schema } from "mongoose";
-import Ibook from "../interfaces/book.interface";
+import { Model, model, Schema } from "mongoose";
+import { bookMethods, Ibook } from "../interfaces/book.interface";
 
-const bookSchema = new Schema<Ibook>({
+const bookSchema = new Schema<Ibook, Model<Ibook>, bookMethods>({
     title: {
         type: String,
         trim: true,
@@ -42,5 +42,16 @@ const bookSchema = new Schema<Ibook>({
     versionKey: false
 })
 
+bookSchema.method('updateAvailable', function(){
+    if(this.copies === 0){
+        this.available = false
+    }
+})
+bookSchema.pre('save', function(){
+    console.log('Middle ware worked before saving the book')
+})
+bookSchema.post('save', function(doc){
+    console.log('Middle ware worked after saving the book and doc is: ', doc )
+})
 const Book = model('Book', bookSchema)
 export default Book
