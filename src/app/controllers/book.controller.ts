@@ -14,11 +14,11 @@ bookRouter.post('/', async (req: Request, res: Response) => {
             data: book
         })
     } catch (error) {
-        res.status(400).json({ 
+        res.status(400).json({
             message: 'Error occured',
             success: false,
             error: error
-         });
+        });
     }
 })
 
@@ -26,18 +26,34 @@ bookRouter.post('/', async (req: Request, res: Response) => {
 // Get all books
 bookRouter.get('/', async (req: Request, res: Response) => {
     try {
-        const books = await Book.find()
+        const {filter, sortBy, sort, limit} = req.query
+        const queryFilter: any = {}
+        if(filter) queryFilter.genre = filter
+
+        let query = Book.find(queryFilter)
+
+        if(sortBy && sort){
+            const sortField = sortBy as string
+            const sortOrder = sort === 'asc' ? 1 : -1
+            query = query.sort({[sortField]: sortOrder})
+        }
+        if(limit){
+            query = query.limit(Number(limit))
+        }
+
+        const books = await query
+
         res.status(201).json({
             success: true,
             message: 'Books retrieved successfully',
             data: books
         })
     } catch (error) {
-        res.status(400).json({ 
+        res.status(400).json({
             message: 'Error occured',
             success: false,
             error: error
-         });
+        });
     }
 })
 
@@ -46,18 +62,18 @@ bookRouter.get('/', async (req: Request, res: Response) => {
 bookRouter.get('/:bookId', async (req: Request, res: Response) => {
     try {
         const id = await req.params.bookId
-        const book = await Book.findOne({_id: new Object(id)})
+        const book = await Book.findOne({ _id: new Object(id) })
         res.status(201).json({
             success: true,
             message: 'Book retrieved successfully',
             data: book
         })
     } catch (error) {
-        res.status(400).json({ 
+        res.status(400).json({
             message: 'Error occured',
             success: false,
             error: error
-         });
+        });
     }
 })
 
@@ -68,18 +84,18 @@ bookRouter.patch('/:bookId', async (req: Request, res: Response) => {
     try {
         const id = await req.params.bookId
         const updatedDoc = req.body
-        const book = await Book.findByIdAndUpdate(id, updatedDoc, {new: true})
+        const book = await Book.findByIdAndUpdate(id, updatedDoc, { new: true })
         res.status(201).json({
             success: true,
             message: 'Book updated successfully',
             data: book
         })
     } catch (error) {
-        res.status(400).json({ 
+        res.status(400).json({
             message: 'Error occured',
             success: false,
             error: error
-         });
+        });
     }
 })
 
@@ -96,11 +112,11 @@ bookRouter.delete('/:bookId', async (req: Request, res: Response) => {
             data: null
         })
     } catch (error) {
-        res.status(400).json({ 
+        res.status(400).json({
             message: 'Error occured',
             success: false,
             error: error
-         });
+        });
     }
 })
 
