@@ -6,7 +6,7 @@ const bookSchema = new Schema<Ibook, Model<Ibook>, bookMethods>({
         type: String,
         trim: true,
         required: true,
-        minlength: [3, "Title minimum length must be 3 character"]
+        minlength: [3, 'Title minimum length must be 3 character']
     },
     author: {
         type: String,

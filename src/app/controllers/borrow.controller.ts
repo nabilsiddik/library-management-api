@@ -23,7 +23,7 @@ borrowRouter.post('/', async (req: Request, res: Response): Promise<void> => {
                     success: false,
                     message: 'Not enough copies available'
                 });
-                return
+                return;
             }
         }
 
@@ -61,8 +61,8 @@ borrowRouter.get('/', async (req: Request, res: Response) => {
         const borrows = await Borrow.aggregate([
             {
                 $group: {
-                    _id: "$book",
-                    totalQuantity: { $sum: "$quantity" }
+                    _id: '$book',
+                    totalQuantity: { $sum: '$quantity' }
                 },
             },
             {
@@ -74,15 +74,15 @@ borrowRouter.get('/', async (req: Request, res: Response) => {
                 }
             },
             {
-                $unwind: "$book"
+                $unwind: '$book'
             },
             {
                 $project: {
                     _id: 0,
                     totalQuantity: 1,
                     book: {
-                        title: "$book.title",
-                        isbn: "$book.isbn"
+                        title: '$book.title',
+                        isbn: '$book.isbn'
                     }
                 }
             }
@@ -100,4 +100,4 @@ borrowRouter.get('/', async (req: Request, res: Response) => {
             error: error
         });
     }
-})
+});
