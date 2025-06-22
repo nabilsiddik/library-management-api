@@ -1,7 +1,7 @@
-import { Date } from 'mongoose';
+import { Date, Types } from 'mongoose';
 
 export interface Iborrow{
-    book: string,
+    book: Types.ObjectId,
     quantity: number,
     dueDate: Date,
     cratedAt: Date,

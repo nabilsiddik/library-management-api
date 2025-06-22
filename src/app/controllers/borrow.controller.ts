@@ -23,6 +23,7 @@ borrowRouter.post('/', async (req: Request, res: Response): Promise<void> => {
                     success: false,
                     message: 'Not enough copies available'
                 });
+                return
             }
         }
 
@@ -48,3 +49,47 @@ borrowRouter.post('/', async (req: Request, res: Response): Promise<void> => {
         console.log(error);
     }
 });
+
+
+// Get summery of borrowed books using mongodb aggregate
+borrowRouter.get('/', async (req: Request, res: Response) => {
+    try {
+        const borrows = await Borrow.aggregate([
+            {
+                $group: {
+                    _id: "$book",
+                    totalQuantity: { $sum: "$quantity" }
+                },
+            },
+            {
+                $lookup: {
+                    from: 'books',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'book'
+                }
+            },
+            {
+                $unwind: "$book"
+            },
+            {
+                $project: {
+                    _id: 0,
+                    totalQuantity: 1,
+                    book: {
+                        title: "$book.title",
+                        isbn: "$book.isbn"
+                    }
+                }
+            }
+        ]);
+        res.status(201).send({
+            success: true,
+            message: 'Borrowed books summary retrieved successfully',
+            data: borrows
+        });
+
+    } catch (error) {
+        console.log(error)
+    }
+})

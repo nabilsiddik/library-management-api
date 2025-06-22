@@ -3,7 +3,7 @@ import { Iborrow } from '../interfaces/borrow.interface';
 
 const borrowSchema = new Schema<Iborrow>({
     book: {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true
     },
     quantity: {
