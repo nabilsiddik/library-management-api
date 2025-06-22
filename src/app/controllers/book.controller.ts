@@ -13,9 +13,9 @@ bookRouter.post('/', async (req: Request, res: Response) => {
             message: 'Book created successfully',
             data: book
         });
-    } catch (error) {
+    } catch (error: any) {
         res.status(400).json({
-            message: 'Error occured',
+            message: error.message,
             success: false,
             error: error
         });
@@ -49,9 +49,9 @@ bookRouter.get('/', async (req: Request, res: Response) => {
             message: 'Books retrieved successfully',
             data: books
         });
-    } catch (error) {
+    } catch (error: any) {
         res.status(400).json({
-            message: 'Error occured',
+            message: error.message,
             success: false,
             error: error
         });
@@ -69,9 +69,9 @@ bookRouter.get('/:bookId', async (req: Request, res: Response) => {
             message: 'Book retrieved successfully',
             data: book
         });
-    } catch (error) {
+    } catch (error: any) {
         res.status(400).json({
-            message: 'Error occured',
+            message: error.message,
             success: false,
             error: error
         });
@@ -91,9 +91,9 @@ bookRouter.patch('/:bookId', async (req: Request, res: Response) => {
             message: 'Book updated successfully',
             data: book
         });
-    } catch (error) {
+    } catch (error: any) {
         res.status(400).json({
-            message: 'Error occured',
+            message: error.message,
             success: false,
             error: error
         });
@@ -112,9 +112,9 @@ bookRouter.delete('/:bookId', async (req: Request, res: Response) => {
             message: 'Book deleted successfully',
             data: null
         });
-    } catch (error) {
+    } catch (error: any) {
         res.status(400).json({
-            message: 'Error occured',
+            message: error.message,
             success: false,
             error: error
         });

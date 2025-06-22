@@ -45,8 +45,12 @@ borrowRouter.post('/', async (req: Request, res: Response): Promise<void> => {
             message: 'Book borrowed successfully',
             data: borrow
         });
-    } catch (error) {
-        console.log(error);
+    } catch (error: any) {
+        res.status(400).json({
+            message: error.message,
+            success: false,
+            error: error
+        });
     }
 });
 
@@ -89,7 +93,11 @@ borrowRouter.get('/', async (req: Request, res: Response) => {
             data: borrows
         });
 
-    } catch (error) {
-        console.log(error)
+    } catch (error: any) {
+        res.status(400).json({
+            message: error.message,
+            success: false,
+            error: error
+        });
     }
 })
