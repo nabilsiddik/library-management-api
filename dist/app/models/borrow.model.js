@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const borrowSchema = new mongoose_1.Schema({
     book: {
-        type: String,
+        type: mongoose_1.Schema.Types.ObjectId,
         required: true
     },
     quantity: {

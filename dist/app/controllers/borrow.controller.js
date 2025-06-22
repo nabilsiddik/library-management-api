@@ -36,6 +36,7 @@ exports.borrowRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, f
                     success: false,
                     message: 'Not enough copies available'
                 });
+                return;
             }
         }
         const updatedBook = yield book_model_1.default.findOneAndUpdate({ _id: book }, { $inc: { copies: -quantity } }, { new: true });
@@ -51,6 +52,56 @@ exports.borrowRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, f
         });
     }
     catch (error) {
-        console.log(error);
+        res.status(400).json({
+            message: error.message,
+            success: false,
+            error: error
+        });
+    }
+}));
+// Get summery of borrowed books using mongodb aggregate
+exports.borrowRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const borrows = yield borrow_model_1.default.aggregate([
+            {
+                $group: {
+                    _id: "$book",
+                    totalQuantity: { $sum: "$quantity" }
+                },
+            },
+            {
+                $lookup: {
+                    from: 'books',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'book'
+                }
+            },
+            {
+                $unwind: "$book"
+            },
+            {
+                $project: {
+                    _id: 0,
+                    totalQuantity: 1,
+                    book: {
+                        title: "$book.title",
+                        isbn: "$book.isbn"
+                    }
+                }
+            }
+        ]);
+        res.status(201).send({
+            success: true,
+            message: 'Borrowed books summary retrieved successfully',
+            data: borrows
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            message: error.message,
+            success: false,
+            error: error
+        });
     }
 }));

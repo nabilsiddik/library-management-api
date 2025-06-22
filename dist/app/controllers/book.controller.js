@@ -29,7 +29,7 @@ exports.bookRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
     catch (error) {
         res.status(400).json({
-            message: 'Error occured',
+            message: error.message,
             success: false,
             error: error
         });
@@ -60,7 +60,7 @@ exports.bookRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, func
     }
     catch (error) {
         res.status(400).json({
-            message: 'Error occured',
+            message: error.message,
             success: false,
             error: error
         });
@@ -79,7 +79,7 @@ exports.bookRouter.get('/:bookId', (req, res) => __awaiter(void 0, void 0, void 
     }
     catch (error) {
         res.status(400).json({
-            message: 'Error occured',
+            message: error.message,
             success: false,
             error: error
         });
@@ -99,7 +99,7 @@ exports.bookRouter.patch('/:bookId', (req, res) => __awaiter(void 0, void 0, voi
     }
     catch (error) {
         res.status(400).json({
-            message: 'Error occured',
+            message: error.message,
             success: false,
             error: error
         });
@@ -118,7 +118,7 @@ exports.bookRouter.delete('/:bookId', (req, res) => __awaiter(void 0, void 0, vo
     }
     catch (error) {
         res.status(400).json({
-            message: 'Error occured',
+            message: error.message,
             success: false,
             error: error
         });
