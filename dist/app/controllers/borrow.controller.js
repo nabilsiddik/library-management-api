@@ -21,14 +21,16 @@ exports.borrowRouter = express_1.default.Router();
 exports.borrowRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
-        const { book, quantity } = req.body;
-        const borrowedBook = yield book_model_1.default.findById(book);
-        console.log(borrowedBook);
+        console.log(body);
+        const { borrowedBookId, quantity } = req.body;
+        const borrowedBook = yield book_model_1.default.findById(borrowedBookId);
+        console.log(borrowedBookId);
         if (!borrowedBook) {
             res.status(404).json({
                 success: false,
                 message: 'Book Not Found'
             });
+            return;
         }
         else {
             if (quantity > borrowedBook.copies) {
@@ -39,7 +41,7 @@ exports.borrowRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, f
                 return;
             }
         }
-        const updatedBook = yield book_model_1.default.findOneAndUpdate({ _id: book }, { $inc: { copies: -quantity } }, { new: true });
+        const updatedBook = yield book_model_1.default.findOneAndUpdate({ _id: borrowedBookId }, { $inc: { copies: -quantity } }, { new: true });
         if (updatedBook) {
             updatedBook.updateAvailable();
             yield updatedBook.save();
@@ -65,8 +67,8 @@ exports.borrowRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, fu
         const borrows = yield borrow_model_1.default.aggregate([
             {
                 $group: {
-                    _id: "$book",
-                    totalQuantity: { $sum: "$quantity" }
+                    _id: '$borrowedBookId',
+                    totalQuantity: { $sum: '$quantity' }
                 },
             },
             {
@@ -78,15 +80,15 @@ exports.borrowRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, fu
                 }
             },
             {
-                $unwind: "$book"
+                $unwind: '$book'
             },
             {
                 $project: {
                     _id: 0,
                     totalQuantity: 1,
                     book: {
-                        title: "$book.title",
-                        isbn: "$book.isbn"
+                        title: '$book.title',
+                        isbn: '$book.isbn'
                     }
                 }
             }

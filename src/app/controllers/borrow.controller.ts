@@ -8,15 +8,17 @@ export const borrowRouter = express.Router();
 borrowRouter.post('/', async (req: Request, res: Response): Promise<void> => {
     try {
         const body = req.body;
-        const { book, quantity } = req.body;
-        const borrowedBook = await Book.findById(book);
-        console.log(borrowedBook);
+        console.log(body)
+        const { borrowedBookId, quantity } = req.body;
+        const borrowedBook = await Book.findById(borrowedBookId);
+        console.log(borrowedBookId);
 
         if (!borrowedBook) {
             res.status(404).json({
                 success: false,
                 message: 'Book Not Found'
             });
+            return
         } else {
             if (quantity > borrowedBook.copies) {
                 res.status(400).json({
@@ -29,7 +31,7 @@ borrowRouter.post('/', async (req: Request, res: Response): Promise<void> => {
 
 
         const updatedBook = await Book.findOneAndUpdate(
-            { _id: book },
+            { _id: borrowedBookId },
             { $inc: { copies: -quantity } },
             { new: true }
         );
@@ -61,7 +63,7 @@ borrowRouter.get('/', async (req: Request, res: Response) => {
         const borrows = await Borrow.aggregate([
             {
                 $group: {
-                    _id: '$book',
+                    _id: '$borrowedBookId',
                     totalQuantity: { $sum: '$quantity' }
                 },
             },

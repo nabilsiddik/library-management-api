@@ -86,7 +86,7 @@ exports.bookRouter.get('/:bookId', (req, res) => __awaiter(void 0, void 0, void 
     }
 }));
 // update book by id
-exports.bookRouter.patch('/:bookId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.bookRouter.put('/:bookId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = yield req.params.bookId;
         const updatedDoc = req.body;

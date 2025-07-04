@@ -81,7 +81,7 @@ bookRouter.get('/:bookId', async (req: Request, res: Response) => {
 
 
 // update book by id
-bookRouter.patch('/:bookId', async (req: Request, res: Response) => {
+bookRouter.put('/:bookId', async (req: Request, res: Response) => {
     try {
         const id = await req.params.bookId;
         const updatedDoc = req.body;
