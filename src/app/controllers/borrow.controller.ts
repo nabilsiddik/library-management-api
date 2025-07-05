@@ -8,10 +8,8 @@ export const borrowRouter = express.Router();
 borrowRouter.post('/', async (req: Request, res: Response): Promise<void> => {
     try {
         const body = req.body;
-        console.log(body)
         const { borrowedBookId, quantity } = req.body;
         const borrowedBook = await Book.findById(borrowedBookId);
-        console.log(borrowedBookId);
 
         if (!borrowedBook) {
             res.status(404).json({
@@ -19,14 +17,15 @@ borrowRouter.post('/', async (req: Request, res: Response): Promise<void> => {
                 message: 'Book Not Found'
             });
             return
-        } else {
-            if (quantity > borrowedBook.copies) {
-                res.status(400).json({
-                    success: false,
-                    message: 'Not enough copies available'
-                });
-                return;
-            }
+        }
+
+
+        if (quantity > borrowedBook.copies) {
+            res.status(400).json({
+                success: false,
+                message: 'Not enough copies available'
+            });
+            return;
         }
 
 
@@ -42,7 +41,7 @@ borrowRouter.post('/', async (req: Request, res: Response): Promise<void> => {
         }
 
         const borrow = await Borrow.create(body);
-        res.status(201).send({
+        res.status(201).json({
             success: true,
             message: 'Book borrowed successfully',
             data: borrow
@@ -89,7 +88,7 @@ borrowRouter.get('/', async (req: Request, res: Response) => {
                 }
             }
         ]);
-        res.status(201).send({
+        res.status(201).json({
             success: true,
             message: 'Borrowed books summary retrieved successfully',
             data: borrows
